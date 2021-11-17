@@ -10,4 +10,5 @@ Find the model number, speed and hard drive capacity for all the PCs with prices
 Result set: model, speed, hd.*/
 
 select model, speed, hd
-from PC where price <500
+from PC 
+where price <500
