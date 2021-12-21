@@ -1,0 +1,20 @@
+use [statistic_cat];
+
+declare 
+	@fio varchar(50), 
+	@today date;
+set @fio = 'Карпенко Татьяна Ильинична';
+set	@today = cast(getdate() as date);
+
+select distinct
+		count([Комментарий]) over (partition by [ТипПретензии], [Статус], [Комментарий] ) as [Кол-во] 
+		,[ТипПретензии] as [Тип претензии]
+		,[Статус]
+		,(case when [Статус] = 'В работе' then [Комментарий] else '' end) as [Комментарий]
+		
+	from [dbo].[ИмпортРеестр ПретензийУчет]
+	where ([ФИО] = @fio)
+		and (([ДатаОбработки] = @today)
+		or [Комментарий] like '%' + convert(varchar(10), @today,  104) +'%')
+	order by [Статус] desc
+
